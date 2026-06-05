@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: auth-service
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/auth-service/**
+              filters:
+                - StripPrefix=1
+
+            - id: product-service
+              uri: lb://PRODUCT
+              predicates:
+                - Path=/product-service/**
+              filters:
+                - StripPrefix=1
+
+            - id: invoice-service
+              uri: lb://INVOICE-SERVICE
+              predicates:
+                - Path=/invoice-service/**
+              filters:
+                - StripPrefix=1
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
